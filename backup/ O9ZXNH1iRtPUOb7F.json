@@ -1,0 +1,225 @@
+{
+  "data": {
+    "createdAt": "2025-02-06T11:42:22.146Z",
+    "updatedAt": "2025-02-06T12:38:49.432Z",
+    "id": "O9ZXNH1iRtPUOb7F",
+    "name": "BackupGithub",
+    "active": false,
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -840,
+          -280
+        ],
+        "id": "3539f608-eadf-47d8-8d65-42ca53af314b",
+        "name": "When clicking ‘Test workflow’"
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.n8n",
+        "typeVersion": 1,
+        "position": [
+          -460,
+          -280
+        ],
+        "id": "13a02ad0-820b-417d-8f6b-fb6e20682309",
+        "name": "Get All",
+        "credentials": {
+          "n8nApi": {
+            "id": "CJ1s8tWr5r0FyxRe",
+            "name": "n8n account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "resource": "file",
+          "operation": "get",
+          "owner": {
+            "__rl": true,
+            "value": "={{ $('Info').item.json.owner }}",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "={{ $('Info').item.json.repository }}",
+            "mode": "name"
+          },
+          "filePath": "=Aafc/ {{ $('Get All').item.json.id }}.json",
+          "additionalParameters": {}
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1,
+        "position": [
+          -280,
+          -280
+        ],
+        "id": "52fe3af0-02dd-4469-9120-465ea5c6797d",
+        "name": "Get file",
+        "alwaysOutputData": true,
+        "credentials": {
+          "githubOAuth2Api": {
+            "id": "yHzX1MJBThAxu6RT",
+            "name": "GitHub account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7f49bfdb-5206-4516-ada0-decfe00612be",
+                "name": "owner",
+                "value": "=ManusAafc",
+                "type": "string"
+              },
+              {
+                "id": "f5996393-64ce-42db-bc87-3ef0525417eb",
+                "name": "repository",
+                "value": "=n8n-backup",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -640,
+          -280
+        ],
+        "id": "17f78bc6-472f-422f-8d8f-a42310247b0d",
+        "name": "Info"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "776eec21-c1ce-443d-8f7f-b99ee685c213",
+                "name": "data",
+                "value": "={{ $json }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -280,
+          -80
+        ],
+        "id": "2ad716fd-fad6-4a9c-910d-c2e111bab7f9",
+        "name": "Workflow Data"
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "={{ $('Info').item.json.owner }}",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "=",
+            "mode": "name"
+          }
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1,
+        "position": [
+          -60,
+          -80
+        ],
+        "id": "388fcce9-c7bf-4474-821e-9c0095f9808e",
+        "name": "GitHub",
+        "credentials": {
+          "githubOAuth2Api": {
+            "id": "yHzX1MJBThAxu6RT",
+            "name": "GitHub account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When clicking ‘Test workflow’": {
+        "main": [
+          [
+            {
+              "node": "Info",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get All": {
+        "main": [
+          [
+            {
+              "node": "Get file",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Workflow Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Info": {
+        "main": [
+          [
+            {
+              "node": "Get All",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get file": {
+        "main": [
+          []
+        ]
+      },
+      "Workflow Data": {
+        "main": [
+          [
+            {
+              "node": "GitHub",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "2e5ba7f9-5ced-4ce4-b9b9-17b312b02f43",
+    "triggerCount": 0,
+    "tags": []
+  }
+}
