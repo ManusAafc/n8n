@@ -1,0 +1,686 @@
+{
+  "data": {
+    "createdAt": "2025-01-30T15:12:31.470Z",
+    "updatedAt": "2025-02-02T15:44:27.506Z",
+    "id": "IIdgkNrE2sdDmege",
+    "name": "My workflow 21",
+    "active": false,
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          640,
+          -360
+        ],
+        "id": "b04f441e-5db0-4b79-8725-c3a2ac0ea346",
+        "name": "When clicking ‘Test workflow’"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "tableId": "v_members",
+          "limit": 10,
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status_id",
+                "condition": "lte",
+                "keyValue": "2"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          820,
+          -360
+        ],
+        "id": "b54993a9-2b54-43a5-a7ec-eb2e034fa45c",
+        "name": "Supabase2",
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "GqXpDziVM7tCulyt",
+            "name": "SB AAFC Siscad"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "members_vector",
+            "mode": "list",
+            "cachedResultName": "members_vector"
+          },
+          "options": {
+            "queryName": "={{ $json.text }}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1,
+        "position": [
+          1300,
+          -240
+        ],
+        "id": "cdd95679-fa99-4482-af2c-866cdada33a6",
+        "name": "Supabase Vector Store3",
+        "credentials": {
+          "supabaseApi": {
+            "id": "GqXpDziVM7tCulyt",
+            "name": "SB AAFC Siscad"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          1400,
+          0
+        ],
+        "id": "5655dd9f-e5ec-4378-b1fa-e17d00be5d66",
+        "name": "Default Data Loader1"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          1400,
+          180
+        ],
+        "id": "7c4aaa67-5d8b-4fe1-b0e7-d50d9e4743bb",
+        "name": "Recursive Character Text Splitter1"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.id }} \n{{ $json.name }} \n{{ $json.cpf }} \n{{ $json.address }}\n{{ $json.city_description }}\n{{ $json.plan_description }}\n{{ $json.region_description }}\n{{ $json.status_description }}\n",
+          "messages": {
+            "messageValues": [
+              {
+                "message": "Vc vai receber registro de uma tabela e aglutinar os campos abaixo em frase como o exemplo abaixo:\nINPUT:\nid 1\nname Eduardo Mattos\ncpf 123243414\nstatus_description Ativo\naddress Av Nitroei, 345\ncity_description Porto Alegre\nplan_description Normal\nregion_description Osorio\n\nOUTPUT:\nSócio id: 1 Nome: Eduardo Mattos cpf: 123243414 Endereco: Av Nitroei, 345 Cidade: Porto Alegre Plano: Normal Região: Osorio Situação: Ativo"
+              }
+            ]
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.5,
+        "position": [
+          1000,
+          -380
+        ],
+        "id": "d97d0ccd-a1e9-4685-9810-5d37a97013b4",
+        "name": "Basic LLM Chain"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -800,
+          -220
+        ],
+        "id": "0f07e31f-bc01-4ccc-ba49-89596b518684",
+        "name": "When chat message received",
+        "webhookId": "74f4e965-f916-4837-8e45-b0853d082932"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.chatInput }}",
+          "options": {
+            "systemPromptTemplate": "Vc deve responder todos os questionamentos e duvidas dos usuarios sobre os sócios ou associados da AAFCorsan de acordo somente com a base de conhecimento fornecida. Sem pesquisas na internet.\nVoce deve informar quaisquer tipo de informação dos socios."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+        "typeVersion": 1.4,
+        "position": [
+          -1340,
+          -260
+        ],
+        "id": "c79c5469-718a-4a7e-afc2-bb9b4a599152",
+        "name": "Question and Answer Chain",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "topK": 50
+        },
+        "type": "@n8n/n8n-nodes-langchain.retrieverVectorStore",
+        "typeVersion": 1,
+        "position": [
+          -1160,
+          -80
+        ],
+        "id": "323c996d-a352-4b7b-bc32-3620ad03afd3",
+        "name": "Vector Store Retriever"
+      },
+      {
+        "parameters": {
+          "tableName": {
+            "__rl": true,
+            "value": "vs_members",
+            "mode": "list",
+            "cachedResultName": "vs_members"
+          },
+          "options": {
+            "queryName": "match_vs_members"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1,
+        "position": [
+          -1220,
+          160
+        ],
+        "id": "c7521120-ddbb-4ff1-b1d1-7f6298a8cf42",
+        "name": "Supabase Vector Store1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "GqXpDziVM7tCulyt",
+            "name": "SB AAFC Siscad"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          -1240,
+          -40
+        ],
+        "id": "626cc41e-d162-405d-b571-c3d102e5a59f",
+        "name": "Groq Chat Model8",
+        "credentials": {
+          "groqApi": {
+            "id": "59zGAKWESQQv5Lz7",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "systemMessage": "Você é um assistente especializado em gestão de sócios.\nSeu objetivo é fornecer informações atualizadas sobre sócios."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.7,
+        "position": [
+          -460,
+          -260
+        ],
+        "id": "372c01d4-d99f-4159-89b5-d27573d5b9f7",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+        "typeVersion": 1.4,
+        "position": [
+          -220,
+          120
+        ],
+        "id": "96a71a58-92c0-4be2-b282-8bcd57d6c85f",
+        "name": "Redis Chat Memory",
+        "credentials": {
+          "redis": {
+            "id": "JEn3xQXNWgHoobdf",
+            "name": "Redis Chat Memory"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "name": "members_info",
+          "description": "Número de sócios ativos registrados no sistema. Esta informação é atualizada regularmente e pode ser usada para responder perguntas sobre o total de membros ativos",
+          "topK": 10
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+        "typeVersion": 1,
+        "position": [
+          -80,
+          80
+        ],
+        "id": "64e2efa1-cb82-4eb2-869c-81937153f625",
+        "name": "Answer questions with a vector store"
+      },
+      {
+        "parameters": {
+          "tableName": {
+            "__rl": true,
+            "value": "vs_members",
+            "mode": "list",
+            "cachedResultName": "vs_members"
+          },
+          "options": {
+            "queryName": "match_vs_members"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1,
+        "position": [
+          -160,
+          280
+        ],
+        "id": "681b9d3a-b406-453a-b16f-7b5fc3903f1c",
+        "name": "Supabase Vector Store",
+        "credentials": {
+          "supabaseApi": {
+            "id": "GqXpDziVM7tCulyt",
+            "name": "SB AAFC Siscad"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -120,
+          500
+        ],
+        "id": "77dc985e-653d-44b6-8de8-7031289e778d",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "PoOUQmpuFM2NB1Ey",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/embedding-001"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1140,
+          380
+        ],
+        "id": "c1bbd055-6a20-41ae-895c-a7855c58a533",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "PoOUQmpuFM2NB1Ey",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "[\n  {\n    \"member_id\": 1,\n    \"member_name\": \"Adao\",\n    \"member_address\": \"Rua\",\n    \"membre_cpf\": \"99393933838\",\n    \"city_description\": \"Porto Alegre\",\n    \"plan_description\": \"Normal\"\n  }\n]"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          40,
+          -100
+        ],
+        "id": "101b5c34-9ba3-4629-a44e-f6d06a9c1f55",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          -440,
+          -40
+        ],
+        "id": "904d6a84-d602-40d7-a231-c27c8a1ab3b9",
+        "name": "Groq Chat Model1",
+        "credentials": {
+          "groqApi": {
+            "id": "59zGAKWESQQv5Lz7",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "embed-multilingual-v2.0"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+        "typeVersion": 1,
+        "position": [
+          1220,
+          -120
+        ],
+        "id": "61428232-2475-4237-95f2-6d148fb9db62",
+        "name": "Embeddings Cohere",
+        "credentials": {
+          "cohereApi": {
+            "id": "qs6y2MzIaFpWJjTF",
+            "name": "CohereApi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmCohere",
+        "typeVersion": 1,
+        "position": [
+          60,
+          300
+        ],
+        "id": "c688db95-1ea9-4394-8ac8-c5290367d75a",
+        "name": "Cohere Model",
+        "credentials": {
+          "cohereApi": {
+            "id": "qs6y2MzIaFpWJjTF",
+            "name": "CohereApi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          940,
+          -240
+        ],
+        "id": "205a0938-dc8f-4910-8f2e-78a05f36c69f",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "59zGAKWESQQv5Lz7",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-1.5-flash",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          1100,
+          -160
+        ],
+        "id": "5d9bb2a5-c9c1-48ba-bf13-598a1e988136",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "PoOUQmpuFM2NB1Ey",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          1300,
+          -20
+        ],
+        "id": "5d62cfb1-a2ba-48eb-b56e-453c877f1b90",
+        "name": "Embeddings Google Gemini2",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "PoOUQmpuFM2NB1Ey",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When clicking ‘Test workflow’": {
+        "main": [
+          [
+            {
+              "node": "Supabase2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase2": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader1": {
+        "ai_document": [
+          [
+            {
+              "node": "Supabase Vector Store3",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter1": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader1",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Supabase Vector Store3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When chat message received": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Vector Store Retriever": {
+        "ai_retriever": [
+          [
+            {
+              "node": "Question and Answer Chain",
+              "type": "ai_retriever",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase Vector Store1": {
+        "ai_vectorStore": [
+          [
+            {
+              "node": "Vector Store Retriever",
+              "type": "ai_vectorStore",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model8": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Question and Answer Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Redis Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Answer questions with a vector store": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Supabase Vector Store": {
+        "ai_vectorStore": [
+          [
+            {
+              "node": "Answer questions with a vector store",
+              "type": "ai_vectorStore",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Supabase Vector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Supabase Vector Store1",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          []
+        ]
+      },
+      "Groq Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Cohere": {
+        "ai_embedding": [
+          []
+        ]
+      },
+      "Cohere Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Answer questions with a vector store",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          []
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini2": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Supabase Vector Store3",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "c5beb72f-e4c9-4e04-8cab-d9fa0abd6e25",
+    "triggerCount": 0,
+    "tags": []
+  }
+}
