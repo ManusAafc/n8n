@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-02-06T11:42:22.146Z",
-  "updatedAt": "2025-02-06T14:54:00.101Z",
+  "updatedAt": "2025-02-06T14:57:30.297Z",
   "id": "O9ZXNH1iRtPUOb7F",
   "name": "BackupGithubCreateUpdate",
   "active": false,
@@ -282,11 +282,11 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1,
       "position": [
-        140,
+        120,
         -620
       ],
-      "id": "739060f1-9e5c-4fe4-9168-118535ea9cef",
-      "name": "Edit File",
+      "id": "81b1ef95-f96d-4dd8-9e98-ecd9599552f4",
+      "name": "Create File1",
       "alwaysOutputData": true,
       "credentials": {
         "githubOAuth2Api": {
@@ -430,7 +430,7 @@
       "main": [
         [
           {
-            "node": "Edit File",
+            "node": "Create File1",
             "type": "main",
             "index": 0
           }
@@ -446,7 +446,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "f3e54f8b-954b-40fb-8057-916dec9ece6b",
+  "versionId": "a23b1323-276a-4957-b6af-7942e0c3e9c4",
   "triggerCount": 0,
   "tags": []
 }
