@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-02-06T13:58:47.480Z",
-  "updatedAt": "2025-02-06T14:35:41.863Z",
+  "updatedAt": "2025-02-06T15:53:33.076Z",
   "id": "JiX5KTT1iYrcW0g2",
   "name": "BackupRestoreGithub",
   "active": false,
@@ -120,8 +120,8 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1,
       "position": [
-        480,
-        -160
+        440,
+        0
       ],
       "id": "09048516-6ed5-4f4f-9f37-6ed33d275b80",
       "name": "Get file",
@@ -189,7 +189,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "3178c774-8d64-42a4-9b6d-2d2fdcd70072",
+  "versionId": "d921672c-ff92-4d5f-9b8a-07fcb94c259b",
   "triggerCount": 0,
   "tags": []
 }
