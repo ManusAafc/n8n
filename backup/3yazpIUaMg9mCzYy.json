@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-02-07T10:01:37.077Z",
-  "updatedAt": "2025-02-07T12:34:18.936Z",
+  "updatedAt": "2025-02-07T22:24:18.954Z",
   "id": "3yazpIUaMg9mCzYy",
   "name": "AAFC_Base Loop",
   "active": true,
@@ -203,7 +203,7 @@
           "__rl": true,
           "value": "1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ",
           "mode": "list",
-          "cachedResultName": "documentos",
+          "cachedResultName": "documentos (NAO CRIAR SUB-PASTAS)",
           "cachedResultUrl": "https://drive.google.com/drive/folders/1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ"
         },
         "event": "fileCreated",
@@ -238,7 +238,7 @@
           "__rl": true,
           "value": "1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ",
           "mode": "list",
-          "cachedResultName": "documentos",
+          "cachedResultName": "documentos (NAO CRIAR SUB-PASTAS)",
           "cachedResultUrl": "https://drive.google.com/drive/folders/1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ"
         },
         "event": "fileUpdated",
@@ -658,6 +658,60 @@
       ],
       "id": "6056e1ee-8947-4192-ade2-fc0ecb562286",
       "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ",
+            "mode": "list",
+            "cachedResultName": "documentos",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1O850Z4R8t2CcMtMsXV_Fn_CpVV-jSoIJ"
+          },
+          "whatToSearch": "folders",
+          "includeTrashed": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1980,
+        300
+      ],
+      "id": "8dde148d-9efa-4ddb-b863-cabf9ffaab0e",
+      "name": "Google Drive1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zE8wfzsT5N5GfLnP",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "documents",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1640,
+        300
+      ],
+      "id": "8c226ea4-2ec7-4f02-9fa9-64abb8b3872f",
+      "name": "Supabase1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "gB9CfngJMxArnys7",
+          "name": "SB AAFC Automation"
+        }
+      }
     }
   ],
   "connections": {
@@ -954,6 +1008,11 @@
           }
         ]
       ]
+    },
+    "Google Drive1": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -961,23 +1020,23 @@
   },
   "staticData": {
     "node:Google Drive Trigger": {
-      "lastTimeChecked": "2025-02-07T13:09:21Z"
+      "lastTimeChecked": "2025-02-07T23:51:24Z"
     },
     "node:Google Drive Trigger1": {
-      "lastTimeChecked": "2025-02-07T13:09:22Z"
+      "lastTimeChecked": "2025-02-07T23:51:25Z"
     },
     "node:Google Drive Trigger2": {
       "lastTimeChecked": "2025-02-05T11:18:38Z"
     },
     "node:Google Drive Trigger3": {
-      "lastTimeChecked": "2025-02-07T13:09:22Z"
+      "lastTimeChecked": "2025-02-07T23:51:25Z"
     }
   },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "f7457333-a395-4f7a-af87-373aa4e71ac7",
+  "versionId": "7634dd95-11b8-40a9-8cf9-41a19e3763ed",
   "triggerCount": 5,
   "tags": []
 }
