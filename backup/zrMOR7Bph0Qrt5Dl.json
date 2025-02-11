@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-02-02T15:48:49.139Z",
-  "updatedAt": "2025-02-02T23:10:36.422Z",
+  "updatedAt": "2025-02-10T12:45:27.037Z",
   "id": "zrMOR7Bph0Qrt5Dl",
   "name": "Siscad DB AI",
   "active": false,
@@ -299,7 +299,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5e2c479f-4a3f-491a-964e-394fc6ae9f49",
+  "versionId": "bcb0b7df-d0bc-4d86-ad7a-9ae39de5c605",
   "triggerCount": 0,
   "tags": []
 }
