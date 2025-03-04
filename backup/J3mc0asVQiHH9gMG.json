@@ -1,0 +1,132 @@
+{
+  "createdAt": "2025-03-03T14:23:46.475Z",
+  "updatedAt": "2025-03-03T18:07:00.268Z",
+  "id": "J3mc0asVQiHH9gMG",
+  "name": "wh_SiscadMeetingMembersWhatsappPrivate",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://automation-evolution.fb66v5.easypanel.host/message/sendText/AAFC",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apiKey",
+              "value": "DC12A5DF37DB-4460-99B9-92D82751A117"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $json.whatsapp_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.message }}"
+            },
+            {
+              "name": "language",
+              "value": "\"pt-BR\""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -540,
+        -760
+      ],
+      "id": "80c27a22-974e-40e8-9e61-158769e37215",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wh_SiscadMeetingMembersWhatsappPrivate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1060,
+        -860
+      ],
+      "id": "4119d438-835a-4928-b9d4-1762f97a1a5e",
+      "name": "Webhook",
+      "webhookId": "f8a2d727-a669-4dae-aee5-30061ae3a9fc"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "724ba9f1-e619-4cfa-8531-95b8b10d8afd",
+              "name": "whatsapp_id",
+              "value": "={{ $json.body.whatsapp_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f9647499-95c9-4c4d-a126-0a74814ad1d3",
+              "name": "message",
+              "value": "={{ $json.body.msg }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -800,
+        -840
+      ],
+      "id": "a4fe45e2-2120-4984-be04-4b6cf0ba6c67",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "d0545994-5b31-4015-a0d0-f732be3773be",
+  "triggerCount": 1,
+  "tags": []
+}
