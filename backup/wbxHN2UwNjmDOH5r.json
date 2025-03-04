@@ -1,14 +1,14 @@
 {
   "createdAt": "2025-01-31T16:48:27.681Z",
-  "updatedAt": "2025-02-01T00:51:10.677Z",
+  "updatedAt": "2025-03-04T02:33:31.613Z",
   "id": "wbxHN2UwNjmDOH5r",
-  "name": "siscadMeetingMembersWhatsapp",
+  "name": "wh_SiscadMeetingMembersWhatsappList",
   "active": true,
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "siscadMeetingMembersWhatsapp",
+        "path": "wh_SiscadMeetingMembersWhatsappList",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
@@ -68,7 +68,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -760,
+        -780,
         -540
       ],
       "id": "f9e5fe68-9cd7-4d85-bbe6-8622a63e908a",
@@ -83,7 +83,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -540,
+        -600,
         -540
       ],
       "id": "439b8119-c1d1-4f66-8bb5-0ec89e2da24b",
@@ -106,8 +106,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -340,
-        -520
+        -420,
+        -540
       ],
       "id": "8628ccad-8279-4d69-a1b8-51de82b837a5",
       "name": "Loop Over Items"
@@ -149,8 +149,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        80,
-        -400
+        0,
+        -320
       ],
       "id": "fb99df24-5a29-4054-98fa-f3fe16fe3df5",
       "name": "Supabase1",
@@ -186,7 +186,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        40,
+        -120,
         -560
       ],
       "id": "1660956f-4970-42b9-9619-de2508448d77",
@@ -225,8 +225,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -140,
-        -440
+        -240,
+        -400
       ],
       "id": "e674ce07-9107-4ae3-bd89-f16696a58b79",
       "name": "If"
@@ -322,7 +322,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "496811f3-2e2f-4fe3-aa83-46bd5840e29d",
+  "versionId": "ef4049c8-8ba3-4ac7-a494-e6ad52ab9f5e",
   "triggerCount": 1,
   "tags": []
 }
