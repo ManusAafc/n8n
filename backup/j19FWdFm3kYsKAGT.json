@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-01-27T23:44:30.169Z",
-  "updatedAt": "2025-01-30T16:57:24.317Z",
+  "updatedAt": "2025-03-04T12:00:51.000Z",
   "id": "j19FWdFm3kYsKAGT",
   "name": "My workflow",
   "active": false,
@@ -106,7 +106,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://automation-evo.fb66v5.easypanel.host/message/sendText/Aafc",
+        "url": "https://automation-evo.fb66v5.easypanel.host/message/sendText/AAFC",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -241,19 +241,6 @@
     },
     {
       "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.7,
-      "position": [
-        -320,
-        -80
-      ],
-      "id": "9b585437-63c0-4d75-8d02-41e8d377e73a",
-      "name": "AI Agent1"
-    },
-    {
-      "parameters": {
         "contextWindowLength": 10
       },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
@@ -344,11 +331,6 @@
       "main": [
         [
           {
-            "node": "AI Agent1",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "AI Agent",
             "type": "main",
             "index": 0
@@ -386,7 +368,7 @@
       }
     ]
   },
-  "versionId": "3df03f21-381c-436c-99bb-7c90ed73e164",
+  "versionId": "20c19f1f-8ba0-4f6c-a9f3-772445f5404d",
   "triggerCount": 1,
   "tags": []
 }
