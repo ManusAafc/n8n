@@ -1,0 +1,392 @@
+{
+  "createdAt": "2025-03-04T14:24:23.248Z",
+  "updatedAt": "2025-03-04T19:42:17.574Z",
+  "id": "EUR1T9kNuV6WFXfr",
+  "name": "tool_MeetingConfirmation",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "whatsapp_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -180,
+        -160
+      ],
+      "id": "a8cf4392-8f21-4b56-9297-0e1575e98cad",
+      "name": "Workflow Input Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Aqui o usuario pode tirar duvidas sobre eventos ou confirmar a participação quando.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        920,
+        160
+      ],
+      "id": "5140b338-2d87-4553-89e4-e47af3774d7c",
+      "name": "AI Agent",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        900,
+        400
+      ],
+      "id": "89985d7a-4d72-40e3-bd98-f8a51eaf71a6",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "59zGAKWESQQv5Lz7",
+          "name": "Groq account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.whatsapp_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1060,
+        400
+      ],
+      "id": "95c41325-b19d-4a17-a032-e0043e432086",
+      "name": "Window Buffer Memory",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1aab0a9e-541a-4ba6-99c9-c658e2e5158b",
+              "leftValue": "={{ $json.member_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        40
+      ],
+      "id": "107ba716-80de-4a8c-ba7e-a80d39a67815",
+      "name": "member_id isNull",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ed07380c-0945-4f78-9867-7f57bb03cd95",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        520,
+        180
+      ],
+      "id": "b12d0a56-a24c-411d-a6a3-997dd6ff0c34",
+      "name": "meeting confirm isNull",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "v_meetings_members",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "=member_id",
+              "keyValue": "={{ $json.member_id }}"
+            },
+            {
+              "keyName": "invited",
+              "keyValue": "1"
+            },
+            {
+              "keyName": "confirmed",
+              "keyValue": "0"
+            },
+            {
+              "keyName": "participated",
+              "keyValue": "0"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        400,
+        180
+      ],
+      "id": "e4554c4f-0ef2-468d-9bad-d85eb5dcf78f",
+      "name": "Get Meeting Confirm",
+      "credentials": {
+        "supabaseApi": {
+          "id": "GqXpDziVM7tCulyt",
+          "name": "SB AAFC Siscad"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "v_meetings",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status_id",
+              "condition": "eq",
+              "keyValue": "2"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        20
+      ],
+      "id": "cdd976eb-85a8-4ce4-baad-f5af3436ff1c",
+      "name": "Get All Meetings Approved",
+      "credentials": {
+        "supabaseApi": {
+          "id": "GqXpDziVM7tCulyt",
+          "name": "SB AAFC Siscad"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "v_members",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "whatsapp_id",
+              "keyValue": "={{ $json.whatsapp_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        40,
+        -160
+      ],
+      "id": "a28ffa81-e92b-4b17-a564-8335a85a60ef",
+      "name": "Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "GqXpDziVM7tCulyt",
+          "name": "SB AAFC Siscad"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "428ec6fd-7055-47f3-bf4c-ae6de16bca85",
+              "name": "member_id",
+              "value": "={{ 0 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        -160
+      ],
+      "id": "fc9227a0-a8a1-496a-afb5-345cffccfb22",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Workflow Input Trigger": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "member_id isNull": {
+      "main": [
+        [
+          {
+            "node": "Get All Meetings Approved",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Meeting Confirm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "meeting confirm isNull": {
+      "main": [
+        [
+          {
+            "node": "Get All Meetings Approved",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Meeting Confirm": {
+      "main": [
+        [
+          {
+            "node": "meeting confirm isNull",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Meetings Approved": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "5e4cde44-5a5e-477e-b626-72a244a0c358",
+  "triggerCount": 0,
+  "tags": []
+}
