@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-03-04T12:01:11.397Z",
-  "updatedAt": "2025-03-04T20:23:35.582Z",
+  "updatedAt": "2025-03-06T00:01:26.964Z",
   "id": "LLHfbmchm4Rpy3nI",
   "name": "AAFC_AI_Router",
   "active": false,
@@ -10,14 +10,14 @@
         "promptType": "define",
         "text": "={{ $('Webhook').item.json.body.data.message.conversation }}",
         "options": {
-          "systemMessage": "Voce é um atendente virtual responsavel por identificar as duvidas dos usuarios e encaminha-los para a área correta da empresa. \nSua lingua é o português do Brasil.\nNão é necessarário a identificacao do usuario.\n\n- Quando tratar de confirmação de participação em eventos, palestras ou encontros, execute a tool \"MeetingConfirm\". Não é necessario a identificação do evento."
+          "systemMessage": "=Voce é um atendente virtual responsavel por identificar as duvidas dos clientes e encaminha-los para a área correta da empresa. \n\nSua lingua é o português do Brasil.\n\nHoje é dia {{ $now.toLocal().format('FFFF') }}\n\n- Quando tratar-se de confirmação de participação em eventos, palestras ou encontros execute a tool \"tool_MeetingConfirm\". Não é necessario a identificação do evento."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -780,
-        -520
+        -1420,
+        -680
       ],
       "id": "675bea62-89f3-43fa-8b83-34f2771ceae4",
       "name": "AI Agent"
@@ -30,8 +30,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -700,
-        -220
+        -1340,
+        -500
       ],
       "id": "3dcfce4b-83ca-4a37-a113-331cb4974a27",
       "name": "Postgres Chat Memory",
@@ -51,8 +51,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -1240,
-        -520
+        -1780,
+        -680
       ],
       "id": "56efd257-87ca-42b8-a3bb-75f65f5dbc2d",
       "name": "Webhook",
@@ -89,8 +89,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -420,
-        -520
+        -1080,
+        -680
       ],
       "id": "73aa2274-cb89-41dd-ac6f-7740e6aa6152",
       "name": "HTTP Request",
@@ -104,8 +104,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        -840,
-        -300
+        -1480,
+        -500
       ],
       "id": "adbf5f85-6fe4-4b97-9eda-ac514354604e",
       "name": "Groq Chat Model",
@@ -145,8 +145,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1000,
-        -520
+        -1600,
+        -680
       ],
       "id": "461fcf02-17e8-447f-a47f-37ade486653b",
       "name": "Edit Fields",
@@ -154,41 +154,176 @@
     },
     {
       "parameters": {
-        "url": "https://automation-n8n-editor.fb66v5.easypanel.host/webhook-test/meeting_confirm",
-        "sendBody": true,
-        "parametersBody": {
+        "workflowInputs": {
           "values": [
             {
-              "name": "whatsapp_id",
-              "valueProvider": "="
+              "name": "whatsapp_id"
             }
           ]
         }
       },
-      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -560,
-        -240
+        -1780,
+        -300
       ],
-      "id": "c26e6cd4-a09f-45c4-bd3b-b2b578f169ad",
-      "name": "HTTP Request1"
+      "id": "8a81c7ee-69f1-465e-8002-4fcbf8ee8b04",
+      "name": "When Executed by Another Workflow"
     },
     {
       "parameters": {
-        "httpMethod": "POST",
-        "path": "meeting_confirm",
-        "options": {}
+        "name": "tool_MeetingConfirm",
+        "description": "Responsavel pela confirmaçao em eventos.",
+        "workflowId": {
+          "__rl": true,
+          "value": "LLHfbmchm4Rpy3nI",
+          "mode": "list",
+          "cachedResultName": "AAFC_AI_Router"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "whatsapp_id": "={{ $('Edit Fields').item.json.whatsapp_id }}"
+          },
+          "matchingColumns": [
+            "whastapp_id"
+          ],
+          "schema": [
+            {
+              "id": "whatsapp_id",
+              "displayName": "whatsapp_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
       },
-      "type": "n8n-nodes-base.webhook",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2,
       "position": [
-        -340,
-        -240
+        -1200,
+        -500
       ],
-      "id": "0f53fe2c-d865-41de-87d1-e4db1da38345",
-      "name": "wbMeetingConfirm",
-      "webhookId": "95755645-56d7-4773-993c-73698e2c6886"
+      "id": "da2be335-98bf-495f-a9da-0dba44b7ee96",
+      "name": "Call n8n Workflow Tool"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "v_members",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "whatsapp_id",
+              "keyValue": "={{ $json.whatsapp_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        -300
+      ],
+      "id": "deb77d4b-d80e-4af8-9768-6d5f0921c10c",
+      "name": "Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "GqXpDziVM7tCulyt",
+          "name": "SB AAFC Siscad"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f733f5d0-1158-4ea6-bc78-e4f4c6c0d0c0",
+              "leftValue": "={{ $('Supabase').item }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1440,
+        -300
+      ],
+      "id": "f5a55548-8f01-473d-ab23-1d9311875bed",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "576a9e74-792d-43cb-be37-d05edf98aaf2",
+              "name": "response",
+              "value": "Ops ... Não encontramos o seu cadastro. Entre em contato para verificar o motivo.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1080,
+        -200
+      ],
+      "id": "14a457ee-9902-470d-af57-10ebb293da0d",
+      "name": "Edit Fields2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0843ab55-dfbd-441a-aa58-c00aa1be4057",
+              "name": "response",
+              "value": "ok",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1020,
+        -400
+      ],
+      "id": "0894874c-72a4-4017-bb8e-ec195ee45b4b",
+      "name": "Edit Fields3",
+      "alwaysOutputData": true
     }
   ],
   "connections": {
@@ -247,12 +382,52 @@
         ]
       ]
     },
-    "HTTP Request1": {
+    "Call n8n Workflow Tool": {
       "ai_tool": [
         [
           {
             "node": "AI Agent",
             "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
             "index": 0
           }
         ]
@@ -267,7 +442,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "71cd4bb3-9b60-46f2-8960-c37ef1cd8458",
+  "versionId": "00d2cba1-d843-491f-ad9e-82e16f9b58eb",
   "triggerCount": 1,
   "tags": []
 }
