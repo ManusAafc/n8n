@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-03-04T12:01:11.397Z",
-  "updatedAt": "2025-03-09T00:15:27.665Z",
+  "updatedAt": "2025-03-09T15:35:33.885Z",
   "id": "LLHfbmchm4Rpy3nI",
   "name": "AAFC Multi Agentes",
   "active": false,
@@ -79,26 +79,11 @@
     },
     {
       "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        20,
-        320
-      ],
-      "id": "8c64364e-2ca6-4ef9-9939-80e83727fd34",
-      "name": "Groq Chat Model",
-      "credentials": {
-        "groqApi": {
-          "id": "59zGAKWESQQv5Lz7",
-          "name": "Groq account"
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemPromptTemplate": "Seja cordial.\nSempre referir-se a AAFCorsan.\nVocê é um especialista em prestar todas as informações constantes na Base de conhecimento: Sobre a AAFCorsan"
         }
-      }
-    },
-    {
-      "parameters": {
-        "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
       "typeVersion": 1.4,
@@ -107,7 +92,8 @@
         -140
       ],
       "id": "dc485189-ab11-4166-8aa0-ce039e39493f",
-      "name": "Question and Answer Chain"
+      "name": "Question and Answer Chain",
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -167,6 +153,46 @@
           "name": "Google Gemini(PaLM) Api account"
         }
       }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        20,
+        120
+      ],
+      "id": "dc8c8d68-fdb2-4c61-bd70-38eafa8d3749",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PoOUQmpuFM2NB1Ey",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-1.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        280,
+        80
+      ],
+      "id": "a32d79c5-f748-416e-b1a2-1ba5f16aa3f4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PoOUQmpuFM2NB1Ey",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "connections": {
@@ -198,22 +224,6 @@
           {
             "node": "Text Classifier",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Groq Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Text Classifier",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
-            "node": "Question and Answer Chain",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -262,6 +272,28 @@
           }
         ]
       ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Question and Answer Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -271,8 +303,17 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "139d8d4b-6306-40c4-b393-51b2075cf553",
+  "pinData": {
+    "Chat Memory Manager": [
+      {
+        "json": {
+          "messages": [],
+          "messagesCount": 0
+        }
+      }
+    ]
+  },
+  "versionId": "a29530d3-4b2f-41d4-ab44-9b8be18fc018",
   "triggerCount": 1,
   "tags": []
 }
