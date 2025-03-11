@@ -1,0 +1,96 @@
+{
+  "createdAt": "2025-03-10T13:51:33.853Z",
+  "updatedAt": "2025-03-10T14:19:42.706Z",
+  "id": "gYMuh1WUPLLvUkE8",
+  "name": "Siscad_Available_Check",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -600,
+        -160
+      ],
+      "id": "9ddbfd5c-6617-41bf-858c-d73984cacc45",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "app",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "1"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "available_last_at",
+              "fieldValue": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss').toString() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -160
+      ],
+      "id": "18f68201-6aa8-40d4-909b-717877a62735",
+      "name": "Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "GqXpDziVM7tCulyt",
+          "name": "SB AAFC Siscad"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        70
+      ]
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "7d5a3746-88a1-4ea6-98cf-eeb75fefef68",
+  "triggerCount": 1,
+  "tags": []
+}
